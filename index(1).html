@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hitung Cerdas Pro - Materi Lengkap Kelas 1 SD - 12 SMA & Kalkulator</title>
+    <title>Math Calculator - Pusat Materi Lengkap SD-SMA & Kalkulator Pintar</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -15,9 +15,13 @@
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDK for Real-Time Leaderboard -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- MathJax for Mathematical Formula Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
     <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200">
@@ -30,7 +34,7 @@
                     <i class="fa-solid fa-graduation-cap text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Hitung Cerdas Pro</h1>
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Math Calculator</h1>
                     <p class="text-xs text-gray-500 dark:text-gray-400">Pusat Materi Lengkap SD-SMA & Kalkulator Pintar</p>
                 </div>
             </div>
@@ -65,16 +69,14 @@
             </button>
         </div>
 
-        <!-- ================= TAB 0: MATERI PEMBELAJARAN (DAPAT DIBUKA PER HALAMAN) ================= -->
+        <!-- ================= TAB 0: MATERI PEMBELAJARAN ================= -->
         <div id="tab-content-material" class="tab-content space-y-6">
-            <!-- Tampilan Daftar Kelas -->
             <div id="material-list-view" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold mb-2 flex items-center space-x-2 text-blue-600">
                     <i class="fa-solid fa-book-bookmark"></i><span>Pusat Buku Materi Matematika (Kelas 1 SD - 12 SMA)</span>
                 </h2>
                 <p class="text-xs text-gray-500 mb-6">Pilih salah satu kelas di bawah ini untuk membuka halaman materi lengkap beserta pembahasan dan contoh soal mendalam.</p>
                 
-                <!-- Filter Jenjang -->
                 <div class="flex flex-wrap gap-2 mb-6">
                     <button onclick="filterLevel('all')" id="lvl-all" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition">Semua Kelas</button>
                     <button onclick="filterLevel('sd')" id="lvl-sd" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition">SD (1 - 6)</button>
@@ -82,19 +84,15 @@
                     <button onclick="filterLevel('sma')" id="lvl-sma" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition">SMA (10 - 12)</button>
                 </div>
 
-                <div id="material-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Kartu Kelas Disuntikkan via JS -->
-                </div>
+                <div id="material-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- Tampilan Halaman Detail Per Kelas (Hidden Default) -->
+            <!-- Detail Halaman Materi Per Kelas -->
             <div id="material-detail-view" class="hidden bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-6">
                 <button onclick="backToMaterialList()" class="inline-flex items-center space-x-2 text-sm font-semibold text-blue-600 hover:underline mb-2">
                     <i class="fa-solid fa-arrow-left"></i><span>Kembali ke Daftar Kelas</span>
                 </button>
-                <div id="detail-content-area" class="space-y-6">
-                    <!-- Isi Detail Halaman Disuntikkan via JS -->
-                </div>
+                <div id="detail-content-area" class="space-y-6"></div>
             </div>
         </div>
 
@@ -156,7 +154,7 @@
                 <h2 class="text-base font-bold mb-3 flex items-center space-x-2 text-blue-600">
                     <i class="fa-solid fa-square-root-variable"></i><span>Kalkulator Kuadrat (Dukungan Minus)</span>
                 </h2>
-                <p class="text-xs text-gray-500 mb-4">Masukkan nilai $a, b, c$ (boleh menggunakan nilai negatif/minus).</p>
+                <p class="text-xs text-gray-500 mb-4">Masukkan nilai \(a, b, c\) (boleh menggunakan nilai negatif/minus).</p>
                 <div class="grid grid-cols-3 gap-3 mb-4">
                     <div>
                         <label class="text-xs text-gray-500">Nilai a</label>
@@ -177,8 +175,8 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="font-bold text-base mb-3 text-indigo-600"><i class="fa-solid fa-lightbulb"></i> Tips Jika Ada Tanda Minus (-)</h3>
                 <ul class="text-xs space-y-3 text-gray-600 dark:text-gray-300 leading-relaxed">
-                    <li>• <strong>Koefisien $a$ Negatif:</strong> Kalikan seluruh persamaan dengan $-1$ agar koefisien $x^2$ positif, sehingga lebih mudah dihitung.</li>
-                    <li>• <strong>Diskriminan Negatif ($D < 0$):</strong> Jika $b^2 - 4ac$ bernilai negatif, persamaan tidak memiliki akar real.</li>
+                    <li>• <strong>Koefisien \(a\) Negatif:</strong> Kalikan seluruh persamaan dengan \(-1\) agar koefisien \(x^2\) positif, sehingga lebih mudah dihitung.</li>
+                    <li>• <strong>Diskriminan Negatif (\(D < 0\)):</strong> Jika \(b^2 - 4ac\) bernilai negatif, persamaan tidak memiliki akar real.</li>
                 </ul>
             </div>
         </div>
@@ -211,8 +209,8 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="font-bold text-base mb-3 text-blue-600"><i class="fa-solid fa-book"></i> Rumus Turunan Dasar</h3>
                 <div class="text-xs space-y-3 text-gray-600 dark:text-gray-300">
-                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Aturan Pangkat:</strong> $\frac{d}{dx}[ax^n] = a \cdot n \cdot x^{n-1}$</div>
-                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Konstanta:</strong> Turunan angka tetap adalah $0$.</div>
+                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Aturan Pangkat:</strong> \(\frac{d}{dx}[ax^n] = a \cdot n \cdot x^{n-1}\)</div>
+                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Konstanta:</strong> Turunan angka tetap adalah \(0\).</div>
                 </div>
             </div>
         </div>
@@ -287,9 +285,14 @@
                 </div>
 
                 <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
-                    <h3 class="font-bold text-sm mb-4 flex items-center space-x-2 text-indigo-600">
-                        <i class="fa-solid fa-ranking-star"></i><span>Papan Peringkat Real-Time</span>
-                    </h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-sm flex items-center space-x-2 text-indigo-600">
+                            <i class="fa-solid fa-ranking-star"></i><span>Papan Peringkat Real-Time</span>
+                        </h3>
+                        <span id="realtime-status" class="text-xs px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 font-medium flex items-center space-x-1">
+                            <span class="w-2 h-2 rounded-full bg-green-500 inline-block animate-pulse"></span><span>Live Terhubung</span>
+                        </span>
+                    </div>
                     <div id="leaderboard-list" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-sm font-mono">
                         <p class="text-gray-400 text-center py-4 text-xs font-sans">Memuat data papan peringkat...</p>
                     </div>
@@ -299,14 +302,51 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 text-center text-xs text-gray-500 mt-auto">
-        <p>&copy; 2026 Hitung Cerdas Pro. Semua hak dilindungi.</p>
+    <!-- Footer & Contact Us -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div>
+                <p class="font-semibold text-gray-700 dark:text-gray-200 text-sm mb-1">Math Calculator</p>
+                <p>&copy; 2026 Math Calculator. Semua hak dilindungi.</p>
+            </div>
+            <div class="flex flex-col sm:items-end space-y-2">
+                <p class="font-semibold text-gray-700 dark:text-gray-200 text-sm">Contact Us :</p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="https://instagram.com/kyynextt" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-pink-600 dark:text-pink-400 hover:underline font-medium">
+                        <i class="fa-brands fa-instagram text-base"></i>
+                        <span>@kyynextt</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/rizky-heryanto-549291364" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                        <i class="fa-brands fa-linkedin text-base"></i>
+                        <span>Rizky Heryanto</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <!-- Script Logic -->
     <script>
-        // Database Materi Lengkap Kelas 1 SD - 12 SMA (Dapat Dibuka Per Halaman)
+        // Konfigurasi Firebase Anda (Proyek: matematika-87992)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIAe5mQ-t7aLgjv5IrqzYVWVmoVjDXmRg",
+            authDomain: "matematika-87992.firebaseapp.com",
+            databaseURL: "https://matematika-87992-default-rtdb.firebaseio.com",
+            projectId: "matematika-87992",
+            storageBucket: "matematika-87992.firebasestorage.app",
+            messagingSenderId: "409375117209",
+            appId: "1:409375117209:web:3c1a35b58d60f27e934d08",
+            measurementId: "G-8K6HQEVS0K"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        if (firebase.analytics) {
+            firebase.analytics();
+        }
+
         const detailedMaterials = {
             1: {
                 level: 'sd', classNum: 1, title: 'Kelas 1 SD: Bilangan, Penjumlahan & Pengurangan Dasar',
@@ -317,35 +357,35 @@
                     'Konsep Pengurangan sebagai Sisa atau Pengambilan Sebagian Benda.',
                     'Mengenal Satuan Waktu Sifat Hari dan Jam Sederhana.'
                 ],
-                formulas: 'a + b = c (Penjumlahan) | a - b = c (Pengurangan)',
+                formulas: 'a + b = c \\quad \\text{(Penjumlahan)} \\quad | \\quad a - b = c \\quad \\text{(Pengurangan)}',
                 examples: [
-                    { q: 'Ani memiliki 5 kelereng merah, lalu diberi Budi 3 kelereng biru. Berapa jumlah seluruh kelereng Ani?', step: 'Diketahui kelereng merah = 5, kelereng biru = 3. Digabungkan berarti dijumlahkan.\n5 + 3 = 8 kelereng.' }
+                    { q: 'Ani memiliki 5 kelereng merah, lalu diberi Budi 3 kelereng biru. Berapa jumlah seluruh kelereng Ani?', step: 'Diketahui kelereng merah = 5, kelereng biru = 3. Digabungkan berarti dijumlahkan.\\n5 + 3 = 8 kelereng.' }
                 ]
             },
             2: {
                 level: 'sd', classNum: 2, title: 'Kelas 2 SD: Perkalian Dasar & Satuan Panjang',
                 intro: 'Mempelajari perkalian sebagai penjumlahan berulang serta pengenalan alat ukur baku seperti meter dan centimeter.',
                 concepts: [
-                    'Perkalian Bilangan sebagai Penjumlahan Berulang (a × b = b ditambahkan sebanyak a kali).',
+                    'Perkalian Bilangan sebagai Penjumlahan Berulang.',
                     'Pembagian sebagai Pengurangan Berulang.',
                     'Mengenal Satuan Baku Panjang (Meter dan Centimeter, 1 m = 100 cm).'
                 ],
-                formulas: 'a × b = b + b + ... (sebanyak a) | 1 Meter = 100 Centimeter',
+                formulas: 'a \\times b = \\underbrace{b + b + \\dots + b}_{\\text{sebanyak } a} \\quad | \\quad 1 \\text{ Meter} = 100 \\text{ cm}',
                 examples: [
-                    { q: 'Terdapat 4 keranjang buah. Setiap keranjang berisi 6 buah mangga. Berapa total mangga seluruhnya?', step: '4 keranjang dikali 6 buah per keranjang.\n4 × 6 = 6 + 6 + 6 + 6 = 24 mangga.' }
+                    { q: 'Terdapat 4 keranjang buah. Setiap keranjang berisi 6 buah mangga. Berapa total mangga seluruhnya?', step: '4 keranjang dikali 6 buah per keranjang.\\n4 \\times 6 = 24 \\text{ mangga}.' }
                 ]
             },
             3: {
                 level: 'sd', classNum: 3, title: 'Kelas 3 SD: Pecahan Sederhana & Keliling Bangun Datar',
                 intro: 'Mengenal pecahan sebagai bagian dari keseluruhan serta menghitung keliling bangun datar menggunakan petak satuan.',
                 concepts: [
-                    'Pecahan Sederhana (Pembilang dan Penyebut, misal 1/2, 1/4, 3/4).',
+                    'Pecahan Sederhana (Pembilang dan Penyebut, misal \\(\\frac{1}{2}, \\frac{1}{4}\\)).',
                     'Keliling Bangun Datar (Menjumlahkan seluruh panjang sisi luar).',
                     'Mengenal Sudut Siku-siku, Lancip, dan Tumpul.'
                 ],
-                formulas: 'Keliling Persegi = 4 × sisi | Keliling Persegi Panjang = 2 × (panjang + lebar)',
+                formulas: '\\text{Keliling Persegi} = 4 \\times s \\quad | \\quad \\text{Keliling Persegi Panjang} = 2 \\times (p + l)',
                 examples: [
-                    { q: 'Sebuah taman berbentuk persegi memiliki panjang sisi 12 meter. Berapa keliling taman tersebut?', step: 'Rumus Keliling Persegi = 4 × sisi\nKeliling = 4 × 12 = 48 meter.' }
+                    { q: 'Sebuah taman berbentuk persegi memiliki panjang sisi 12 meter. Berapa keliling taman tersebut?', step: '\\text{Keliling} = 4 \\times s\\n\\text{Keliling} = 4 \\times 12 = 48 \\text{ meter}.' }
                 ]
             },
             4: {
@@ -356,9 +396,9 @@
                     'Menentukan FPB dan KPK menggunakan Pohon Faktor.',
                     'Pembulatan ke Puluhan, Ratusan, atau Ribuan Terdekat.'
                 ],
-                formulas: 'KPK = kelipatan sekutu terkecil | FPB = faktor sekutu terbesar',
+                formulas: '\\text{KPK} = \\text{Kelipatan Sekutu Terkecil} \\quad | \\quad \\text{FPB} = \\text{Faktor Sekutu Terbesar}',
                 examples: [
-                    { q: 'Tentukan FPB dan KPK dari angka 12 dan 18.', step: 'Faktor 12: 1, 2, 3, 4, 6, 12. Faktor 18: 1, 2, 3, 6, 9, 18.\nFPB terbesar adalah 6.\nKPK dari 12 dan 18 adalah 36.' }
+                    { q: 'Tentukan FPB dan KPK dari angka 12 dan 18.', step: '\\text{Faktor 12: } 1, 2, 3, 4, 6, 12.\\n\\text{Faktor 18: } 1, 2, 3, 6, 9, 18.\\n\\text{FPB} = 6, \\quad \\text{KPK} = 36.' }
                 ]
             },
             5: {
@@ -366,12 +406,12 @@
                 intro: 'Memecahkan masalah sehari-hari yang melibatkan perbandingan, kecepatan perjalanan, debit air, dan skala peta.',
                 concepts: [
                     'Perbandingan Senilai dan Berbalik Nilai.',
-                    'Kecepatan, Jarak, dan Waktu (Jokowi: Jarak = Kecepatan × Waktu).',
+                    'Kecepatan, Jarak, dan Waktu.',
                     'Debit Air (Volume per Satuan Waktu).'
                 ],
-                formulas: 'Kecepatan (v) = Jarak (s) / Waktu (t) | Debit (Q) = Volume (V) / Waktu (t)',
+                formulas: 'v = \\frac{s}{t} \\quad (\\text{Kecepatan} = \\frac{\\text{Jarak}}{\\text{Waktu}}) \\quad | \\quad Q = \\frac{V}{t}',
                 examples: [
-                    { q: 'Sebuah mobil menempuh jarak 150 km dalam waktu 3 jam. Berapa kecepatan rata-rata mobil tersebut?', step: 'v = s / t\nv = 150 km / 3 jam = 50 km/jam.' }
+                    { q: 'Sebuah mobil menempuh jarak 150 km dalam waktu 3 jam. Berapa kecepatan rata-rata mobil tersebut?', step: 'v = \\frac{s}{t}\\nv = \\frac{150 \\text{ km}}{3 \\text{ jam}} = 50 \\text{ km/jam}.' }
                 ]
             },
             6: {
@@ -379,11 +419,11 @@
                 intro: 'Persiapan akhir SD mencakup pengolahan data statistik (mean, median, modus) serta perhitungan volume bangun ruang gabungan.',
                 concepts: [
                     'Menghitung Rata-rata (Mean), Median (Nilai Tengah), dan Modus (Data Sering Muncul).',
-                    'Luas Permukaan dan Volume Bangun Ruang Gabungan (Tabung, Kerucut, Bola, Kubus).'
+                    'Luas Permukaan dan Volume Bangun Ruang Gabungan.'
                 ],
-                formulas: 'Mean = (Jumlah Seluruh Data) / (Banyaknya Data)',
+                formulas: '\\text{Mean} = \\frac{\\sum x_i}{n} = \\frac{\\text{Jumlah Seluruh Data}}{\\text{Banyaknya Data}}',
                 examples: [
-                    { q: 'Data nilai ulangan: 70, 80, 80, 90, 100. Berapa nilai Rata-rata (Mean)?', step: 'Jumlah nilai = 70 + 80 + 80 + 90 + 100 = 420.\nBanyak data = 5.\nMean = 420 / 5 = 84.' }
+                    { q: 'Data nilai ulangan: 70, 80, 80, 90, 100. Berapa nilai Rata-rata (Mean)?', step: '\\text{Jumlah nilai} = 70 + 80 + 80 + 90 + 100 = 420.\\n\\text{Mean} = \\frac{420}{5} = 84.' }
                 ]
             },
             7: {
@@ -392,11 +432,11 @@
                 concepts: [
                     'Operasi Hitung Bilangan Bulat dan Pecahan.',
                     'Konsep Himpunan, Himpunan Semesta, Irisan, dan Gabungan.',
-                    'Operasi Aljabar (Suku Sejenis, Penjumlahan, Pengurangan, dan Pemfaktoran Sederhana).'
+                    'Operasi Aljabar (Suku Sejenis, Penjumlahan, Pengurangan).'
                 ],
-                formulas: 'Sifat Distributif: a(b + c) = ab + ac | Himpunan A ∪ B (Gabungan)',
+                formulas: 'a(b + c) = ab + ac \\quad | \\quad A \\cup B \\text{ (Gabungan Himpunan)}',
                 examples: [
-                    { q: 'Sederhanakan bentuk aljabar berikut: 3(2x - 4) + 5x.', step: '1. Jabarkan kurung: 3(2x) - 3(4) + 5x = 6x - 12 + 5x.\n2. Gabungkan suku sejenis (6x + 5x) = 11x - 12.' }
+                    { q: 'Sederhanakan bentuk aljabar berikut: 3(2x - 4) + 5x.', step: '= 3(2x) - 3(4) + 5x\\n= 6x - 12 + 5x = 11x - 12.' }
                 ]
             },
             8: {
@@ -407,9 +447,9 @@
                     'Persamaan Garis Lurus dan Cara Menghitung Gradien (m).',
                     'Sistem Persamaan Linear Dua Variabel (SPLDV).'
                 ],
-                formulas: 'Pythagoras: c² = a² + b² | Gradien m = (y₂ - y₁) / (x₂ - x₁)',
+                formulas: 'c^2 = a^2 + b^2 \\quad | \\quad m = \\frac{y_2 - y_1}{x_2 - x_1}',
                 examples: [
-                    { q: 'Diketahui sisi alas segitiga siku-siku 6 cm dan tinggi 8 cm. Berapa panjang sisi miring (c)?', step: 'c² = a² + b²\nc² = 6² + 8² = 36 + 64 = 100\nc = √100 = 10 cm.' }
+                    { q: 'Diketahui sisi alas segitiga siku-siku 6 cm dan tinggi 8 cm. Berapa panjang sisi miring (c)?', step: 'c^2 = 6^2 + 8^2 = 36 + 64 = 100\\nc = \\sqrt{100} = 10 \\text{ cm}.' }
                 ]
             },
             9: {
@@ -418,11 +458,11 @@
                 concepts: [
                     'Sifat-sifat Bilangan Berpangkat (Eksponen).',
                     'Merasionalkan Penyebut Bentuk Akar.',
-                    'Penyelesaian Persamaan Kuadrat (Faktorisasi, Melengkapkan Kuadrat Sempurna, dan Rumus ABC).'
+                    'Penyelesaian Persamaan Kuadrat dengan Rumus ABC.'
                 ],
-                formulas: 'a^m × a^n = a^{m+n} | Rumus ABC: x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}',
+                formulas: 'a^m \\times a^n = a^{m+n} \\quad | \\quad x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}',
                 examples: [
-                    { q: 'Tentukan akar-akar persamaan kuadrat dari x² - 5x + 6 = 0.', step: '1. Gunakan faktorisasi: (x - 2)(x - 3) = 0.\n2. Diperoleh x = 2 atau x = 3.' }
+                    { q: 'Tentukan akar-akar persamaan kuadrat dari x² - 5x + 6 = 0.', step: '\\text{Faktorisasi: } (x - 2)(x - 3) = 0\\nx = 2 \\quad \\text{atau} \\quad x = 3.' }
                 ]
             },
             10: {
@@ -431,11 +471,11 @@
                 concepts: [
                     'Pertidaksamaan Nilai Mutlak.',
                     'Sifat-sifat Logaritma dan Kalkulasi Eksponensial.',
-                    'Perbandingan Trigonometri pada Segitiga Siku-siku (Sin, Cos, Tan, Cosec, Sec, Cotan).'
+                    'Perbandingan Trigonometri pada Segitiga Siku-siku.'
                 ],
-                formulas: '^a\\log b = c \\iff a^c = b | \\sin \\alpha = \\frac{\\text{Depan}}{\\text{Miring}}',
+                formulas: '^a\\log b = c \\iff a^c = b \\quad | \\quad \\sin \\alpha = \\frac{\\text{Depan}}{\\text{Miring}}',
                 examples: [
-                    { q: 'Hitung nilai dari ^2\\log 8.', step: '^2\\log 8 adalah pangkat berapa agar 2 menghasilkan 8.\nKarena 2³ = 8, maka hasilnya adalah 3.' }
+                    { q: 'Hitung nilai dari ^2\\log 8.', step: '^2\\log 8 = 3 \\quad (\\text{karena } 2^3 = 8).' }
                 ]
             },
             11: {
@@ -443,12 +483,12 @@
                 intro: 'Mempelajari barisan dan deret aritmatika/geometri, operasi matriks secara lengkap, serta pengenalan konsep dasar turunan fungsi.',
                 concepts: [
                     'Barisan dan Deret Aritmatika serta Geometri.',
-                    'Operasi Hitung Matriks (Penjumlahan, Pengurangan, Perkalian Matriks, dan Determinan).',
+                    'Operasi Hitung Matriks (Penjumlahan, Pengurangan, Perkalian).',
                     'Turunan Fungsi Aljabar (Aturan Pangkat).'
                 ],
-                formulas: 'U_n = a + (n-1)b (Aritmatika) | \\frac{d}{dx}[ax^n] = a \\cdot n \\cdot x^{n-1}',
+                formulas: 'U_n = a + (n-1)b \\quad | \\quad \\frac{d}{dx}[ax^n] = a \\cdot n \\cdot x^{n-1}',
                 examples: [
-                    { q: 'Tentukan suku ke-10 dari barisan aritmatika: 3, 7, 11, 15, ...', step: 'Diketahui a = 3, beda (b) = 4.\nU_n = a + (n-1)b\nU_{10} = 3 + (10 - 1)4 = 3 + 36 = 39.' }
+                    { q: 'Tentukan suku ke-10 dari barisan aritmatika: 3, 7, 11, 15, ...', step: 'a = 3, b = 4\\nU_{10} = 3 + (10 - 1)(4) = 3 + 36 = 39.' }
                 ]
             },
             12: {
@@ -457,11 +497,11 @@
                 concepts: [
                     'Aplikasi Turunan (Titik Stasioner, Nilai Maksimum dan Minimum Fungsi).',
                     'Integral Tak Tentu dan Integral Tentu.',
-                    'Peluang Kejadian Majemuk (Saling Lepas, Bebas, dan Bersyarat).'
+                    'Peluang Kejadian Majemuk.'
                 ],
-                formulas: '\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C',
+                formulas: '\\int ax^n \\, dx = \\frac{a}{n+1}x^{n+1} + C',
                 examples: [
-                    { q: 'Tentukan hasil integral tak tentu dari \\int 6x² dx.', step: 'Gunakan rumus integral pangkat:\n= \\frac{6}{2+1}x^{2+1} + C = \\frac{6}{3}x³ + C = 2x³ + C.' }
+                    { q: 'Tentukan hasil integral tak tentu dari \\int 6x^2 \\, dx.', step: '= \\frac{6}{2+1}x^{2+1} + C\\n= \\frac{6}{3}x^3 + C = 2x^3 + C.' }
                 ]
             }
         };
@@ -529,8 +569,8 @@
                     <h3 class="font-bold text-sm text-indigo-600 mb-2 flex items-center space-x-2">
                         <i class="fa-solid fa-square-root-variable"></i><span>Rumus & Prinsip Matematika</span>
                     </h3>
-                    <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 font-mono text-sm text-indigo-700 dark:text-indigo-300">
-                        ${m.formulas}
+                    <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 text-sm text-indigo-700 dark:text-indigo-300 overflow-x-auto">
+                        \\[ ${m.formulas} \\]
                     </div>
                 </div>
 
@@ -542,8 +582,8 @@
                         ${m.examples.map((ex, idx) => `
                             <div class="p-5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
                                 <p class="font-semibold text-sm text-gray-800 dark:text-gray-200">Soal ${idx + 1}: ${ex.q}</p>
-                                <div class="p-3 bg-white dark:bg-gray-800 rounded-xl text-xs font-mono text-gray-600 dark:text-gray-300 whitespace-pre-line border border-gray-100 dark:border-gray-700">
-                                    <strong>Penyelesaian Langkah demi Langkah:</strong>\n${ex.step}
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-xl text-xs text-gray-600 dark:text-gray-300 whitespace-pre-line border border-gray-100 dark:border-gray-700 overflow-x-auto">
+                                    <strong>Penyelesaian Langkah demi Langkah:</strong>\\n\\(${ex.step}\\)
                                 </div>
                             </div>
                         `).join('')}
@@ -554,6 +594,10 @@
                     <button onclick="backToMaterialList()" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-gray-200 transition">Kembali ke Daftar Kelas</button>
                 </div>
             `;
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -563,10 +607,8 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize Material List
         renderMaterialList('all');
 
-        // Tab Switcher
         function switchTab(tabId) {
             ['material', 'calc', 'quad', 'calculus', 'geometry', 'quiz'].forEach(t => {
                 document.getElementById('tab-content-' + t).classList.add('hidden');
@@ -576,6 +618,10 @@
             document.getElementById('tab-content-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + tabId);
             activeBtn.className = "tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-blue-600 text-white shadow-md transition";
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
         }
 
         function toggleDarkMode() {
@@ -590,7 +636,6 @@
             }
         }
 
-        // Kalkulator Ilmiah
         let calcInput = '', calcHistory = [];
         function calcAppend(val) {
             if (calcInput === '0' && val !== '.') calcInput = val;
@@ -631,7 +676,6 @@
         }
         function clearHistory() { calcHistory = []; renderHistory(); }
 
-        // Persamaan Kuadrat
         function hitungKuadrat() {
             const a = parseFloat(document.getElementById('q-a').value), b = parseFloat(document.getElementById('q-b').value), c = parseFloat(document.getElementById('q-c').value);
             const resBox = document.getElementById('res-quad');
@@ -647,7 +691,6 @@
             resBox.innerHTML = html;
         }
 
-        // Turunan
         function hitungTurunan() {
             const a1 = parseFloat(document.getElementById('t-a1').value) || 0, n1 = parseFloat(document.getElementById('t-n1').value) || 0;
             const a2 = parseFloat(document.getElementById('t-a2').value) || 0, n2 = parseFloat(document.getElementById('t-n2').value) || 0;
@@ -659,7 +702,6 @@
             resBox.innerHTML = `<p class="text-lg font-bold text-indigo-600 font-mono">f'(x) = ${res}</p>`;
         }
 
-        // Bangun Ruang
         const spaceConfig = {
             kubus: [{label: 'Rusuk (s)', id: 's'}],
             balok: [{label: 'Panjang (p)', id: 'p'}, {label: 'Lebar (l)', id: 'l'}, {label: 'Tinggi (t)', id: 't'}],
@@ -683,10 +725,7 @@
             resBox.innerHTML = `<p>Volume: <strong class="text-blue-600">${vol.toFixed(2)}</strong></p><p>Luas Permukaan: <strong class="text-indigo-600">${lp.toFixed(2)}</strong></p>`;
         }
 
-        // Kuis & Firebase Leaderboard
-        const firebaseConfig = { databaseURL: "https://hitung-cerdas-pro-default-rtdb.firebaseio.com/" };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        // Kuis & Real-Time Leaderboard (Firebase)
         const quizData = [
             { q: "Berapakah turunan dari f(x) = 5x³?", opts: ["15x²", "5x²", "15x³", "5"], ans: 0, exp: "Turunan 5x³ adalah 5(3)x² = 15x²." },
             { q: "Jika D < 0 pada persamaan kuadrat, maka...", opts: ["Akar kembar", "Akar real", "Tidak ada akar real", "Akar nol"], ans: 2, exp: "Jika D < 0, akar berupa bilangan imajiner." },
@@ -696,6 +735,7 @@
         function startQuiz() {
             const nameInput = document.getElementById('player-name').value.trim();
             if (nameInput) playerName = nameInput;
+            else playerName = "Anonim";
             qIdx = 0; score = 0; answered = false;
             document.getElementById('quiz-start-screen').classList.add('hidden');
             document.getElementById('quiz-result-screen').classList.add('hidden');
@@ -710,7 +750,7 @@
             document.getElementById('quiz-q-text').innerText = q.q;
             document.getElementById('quiz-exp').classList.add('hidden');
             document.getElementById('quiz-next-btn').classList.add('hidden');
-            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 text-sm font-medium">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
+            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
         }
         function ansQ(selected) {
             if (answered) return;
@@ -719,6 +759,7 @@
             expDiv.classList.remove('hidden');
             if (selected === q.ans) {
                 score += 33;
+                if (qIdx === quizData.length - 1 && score === 99) score = 100;
                 document.getElementById(`q-opt-${selected}`).classList.add('bg-green-100', 'border-green-500', 'text-green-700');
                 expDiv.className = "p-4 rounded-xl text-sm border bg-green-50 border-green-200 text-green-800";
                 expDiv.innerHTML = `<strong>Benar!</strong> ${q.exp}`;
@@ -738,14 +779,37 @@
                 document.getElementById('quiz-question-screen').classList.add('hidden');
                 document.getElementById('quiz-result-screen').classList.remove('hidden');
                 document.getElementById('quiz-final-score').innerText = `${playerName}, Skor Total Anda: ${score}`;
-                try { db.ref('leaderboard').push({ name: playerName, score: score, time: Date.now() }); } catch(e){}
+                
+                // Simpan ke Firebase Realtime Database
+                db.ref('leaderboard').push({
+                    name: playerName,
+                    score: score,
+                    time: firebase.database.ServerValue.TIMESTAMP
+                }).catch(err => console.error("Firebase write error:", err));
             }
         }
-        db.ref('leaderboard').orderByChild('score').limitToLast(10).on('value', (snapshot) => {
-            const list = document.getElementById('leaderboard-list'), data = snapshot.val();
-            if (!data) { list.innerHTML = '<p class="text-gray-400 text-center py-4 text-xs">Belum ada skor.</p>'; return; }
+
+        // Listener Real-Time Firebase Leaderboard
+        db.ref('leaderboard').orderByChild('score').limitToLast(15).on('value', (snapshot) => {
+            const list = document.getElementById('leaderboard-list');
+            const data = snapshot.val();
+            if (!data) {
+                list.innerHTML = '<p class="text-gray-400 text-center py-4 text-xs font-sans">Belum ada skor yang tercatat. Jadilah yang pertama!</p>';
+                return;
+            }
             let arr = Object.values(data).sort((a, b) => b.score - a.score);
-            list.innerHTML = arr.map((item, index) => `<div class="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl flex justify-between text-xs"><span>#${index + 1} ${item.name}</span><span class="font-bold text-blue-600">${item.score} Poin</span></div>`).join('');
+            list.innerHTML = arr.map((item, index) => {
+                let badgeColor = index === 0 ? 'text-yellow-500 font-bold' : index === 1 ? 'text-gray-400 font-bold' : index === 2 ? 'text-amber-600 font-bold' : 'text-gray-600 dark:text-gray-300';
+                return `
+                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl flex justify-between items-center text-xs border border-gray-100 dark:border-gray-800">
+                        <span class="${badgeColor}">#${index + 1} ${item.name}</span>
+                        <span class="font-bold text-blue-600 dark:text-blue-400">${item.score} Poin</span>
+                    </div>
+                `;
+            }).join('');
+        }, (error) => {
+            document.getElementById('realtime-status').innerHTML = `<span class="text-red-600">Mode Offline (Cek Rules Firebase)</span>`;
+            document.getElementById('realtime-status').className = "text-xs px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-medium";
         });
     </script>
 </body>
